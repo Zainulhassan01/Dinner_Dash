@@ -51,7 +51,7 @@ class CartsController < ApplicationController
 
   def destroy
     session.delete(:cart)
-    Cart.delete_all
+    Cart.where(user_id: current_user.id).delete_all
     flash[:notice] = 'Cart has been cleared.'
     redirect_to root_path
   end
@@ -74,7 +74,6 @@ class CartsController < ApplicationController
 
   def update_cart
     ActiveRecord::Base.transaction do
-      check_user
       yield
       check_user
     ensure

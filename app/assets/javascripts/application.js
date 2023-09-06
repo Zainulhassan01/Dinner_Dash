@@ -20,7 +20,6 @@
 
 $ (function(){
 $('select').change( function(e){
-    console.log('123');
     var status = document.getElementById("Filter");
     var index = status.options[status.selectedIndex].text;
     $.ajax({
