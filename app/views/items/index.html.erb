@@ -10,7 +10,7 @@
           <p><%= item.price %></p>
           <%if policy(item).show? %>
             <%= button_to "Add item to cart", { :controller => "carts", :action => "update",
-                :item_id => item.id, id: current_user.present? ? current_user.id : guest_user, :restaurant_id=> item.restaurant_id}, method: :patch,
+                :item_id => item.id, id: current_user.present? ? current_user.id : User.last.id + 1, :restaurant_id=> item.restaurant_id}, method: :patch,
                 class: 'btn btn-primary' %>
           <%end%>
           <div class = 'img'>
