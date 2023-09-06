@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2021_09_21_082939) do
     t.integer "quantity", null: false
     t.integer "subtotal", null: false
     t.bigint "item_id", null: false
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_carts_on_item_id"

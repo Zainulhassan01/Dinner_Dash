@@ -3,8 +3,9 @@
 # Cart helper
 module CartHandler
   def removeitem(item)
-    cart = Cart.find_by(item_id: item.id)
-    Cart.delete(cart.id)
+    item1 = Item.find_by(title: item)
+    cart = Cart.find_by(item_id: item1.id)
+    Cart.delete(cart.id) if cart.present?
   end
 
   def create_order_according_to_cart(carts, total)

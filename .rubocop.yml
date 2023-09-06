@@ -43,7 +43,8 @@ Lint/AmbiguousBlockAssociation:
 
 Style/ClassVars:
   Enabled: false
-
+convention:Style/GuardClause:
+  Enabled: false
 Style/Documentation:
   Enabled: true
 Metrics/AbcSize:

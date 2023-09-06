@@ -1,14 +1,10 @@
 <div class = 'show'>
   <% if @carts.present? %>
-    <%= link_to 'Clear cart',cart_path(current_user.present? ? current_user.id : User.last.id + 1),
-    method: :delete, data:{confirm: 'Are you sure bhaijan!'}, class: 'link'%>
     <div class ='item-display'>
         <div id = 'itemrender'>
           <%= render partial: 'quantityrender', locals: {carts: @carts}%>
         </div>
     </div>
-    <br>
-    <%= button_to 'Checkout',{controller: 'carts', action:'checkout',total: find_total(@carts) }, class: 'btn btn-primary' %>
   <%elsif @carts.blank?%>
     <h4>No items in cart.</h4>
   <%end%>

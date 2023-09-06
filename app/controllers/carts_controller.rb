@@ -5,14 +5,12 @@ class CartsController < ApplicationController
   include CartHandler
   before_action :find_item, only: %i[create update]
   before_action :authenticate_user!, only: %i[checkout]
-  before_action :find_cart, only: %i[update]
+  before_action :create_session, only: %i[update]
   after_action :update_cart, only: %i[update quantity]
 
   def index
     @carts = session[:cart].presence ? session[:cart] : nil
-    # handle multiple items with same name in cart
     @carts = cart_to_session if current_user
-    # byebug
   end
 
   def create
@@ -28,7 +26,12 @@ class CartsController < ApplicationController
 
   def update
     if session[:cart][params[:item_title]].present?
-      to_boolean(params[:remove]) ? session[:cart].delete(params[:item_title]) && redirect_back(fallback_location: root_path) && return : nil
+      if to_boolean(params[:remove])
+        session[:cart].delete(params[:item_title])
+        removeitem(params[:item_title])
+        flash[:notice] = 'Item has been removed.'
+        redirect_back(fallback_location: root_path)
+      end
     else
       create
     end
@@ -42,12 +45,7 @@ class CartsController < ApplicationController
   end
 
   def checkout
-    @carts = session[:cart]
-    @carts.each do |cart|
-      item = Item.find_by(title: cart[0])
-      Cart.create!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][item.title],
-                   subtotal: item.price * session[:cart][item.title])
-    end
+    populate_cart
     create_order_according_to_cart(session[:cart], params[:total])
     Cart.where(user_id: current_user.id).delete_all
     redirect_to root_path, notice: 'Order has been placed.' if session.delete(:cart)
@@ -72,10 +70,8 @@ class CartsController < ApplicationController
     count
   end
 
-  def find_cart
+  def create_session
     session[:cart] ||= {} if session[:cart].nil?
-    item = Item.find_by(title: params[:item_title])
-    @restaurant_id = item.restaurant_id
   end
 
   def check_count?(count)
@@ -83,13 +79,36 @@ class CartsController < ApplicationController
   end
 
   def update_cart
-    item = Item.find_by(title: params[:item_title])
-    to_boolean(params[:remove]) ? removeitem(item) && return : nil
-
-    cart = Cart.find_by(item_id: item.id)
     if current_user
+      populate_cart unless Cart.nil?
+      item = Item.find_by(title: params[:item_title])
+      if to_boolean(params[:remove])
+        # removeitem(item)
+        session[:cart].delete(params[:item_title])
+        Cart.where(quantity: 0).delete_all
+        return
+      end
+      cart = Cart.find_by(item_id: item.id)
       cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
                    subtotal: item.price * session[:cart][params[:item_title]].to_i)
+    end
+    Cart.where(quantity: 0).delete_all
+  end
+
+  def populate_cart
+    if current_user
+      @carts = session[:cart]
+      @carts.each do |cart|
+        item = Item.find_by(title: cart[0])
+        cart = Cart.find_by(item_id: item.id)
+        if !cart.nil?
+          cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
+                       subtotal: item.price * session[:cart][params[:item_title]].to_i)
+        else
+          Cart.create!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][item.title].to_i,
+                       subtotal: item.price * session[:cart][item.title].to_i)
+        end
+      end
     end
   end
 
@@ -98,7 +117,7 @@ class CartsController < ApplicationController
     @carts = Cart.where(user_id: current_user.id)
     @carts.each do |cart|
       item = Item.find_by(id: cart.item_id)
-      session[:cart][item.title] = cart.quantity
+      session[:cart][item.title] = cart.quantity if item.available
     end
     session[:cart]
   end

@@ -6,7 +6,7 @@ class CreateCarts < ActiveRecord::Migration[5.2]
       t.integer :quantity, null: false
       t.integer :subtotal, null: false
       t.references :item, null: false, foreign_key: true
-      t.references :user, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end
