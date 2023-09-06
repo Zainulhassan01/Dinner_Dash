@@ -2,7 +2,6 @@
 
 # Polcy for authorization
 class RestaurantPolicy < ApplicationPolicy
-    # use terinary operators
     def index?
       true
     end

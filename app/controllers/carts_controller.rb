@@ -76,7 +76,9 @@ class CartsController < ApplicationController
     authorize Cart
     if current_user.nil?
       redirect_to root_path, notice: 'Cart has been cleared.' if Cart.where('user_id is null').delete_all
-    elsif Cart.where(user_id: current_user.id).delete_all
+    else
+      set_cart
+      Cart.where(user_id: current_user.id).delete_all
       redirect_to root_path, notice: 'Cart has been cleared.'
     end
   end

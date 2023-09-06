@@ -5,7 +5,6 @@ class CartPolicy < ApplicationPolicy
       true
     end
   
-    # can only create/update his own cart
     def update?
       user ? true : User.last.id + 1
     end
