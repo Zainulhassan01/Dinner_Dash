@@ -1,0 +1,32 @@
+<div class = 'show'>
+  <% if @carts.present? %>
+    <%= link_to 'Clear cart',cart_path(current_user.present? ? current_user.id : User.last.id + 1),
+    method: :delete, data:{confirm: 'Are you sure bhaijan!'}, class: 'link'%>
+    <div class ='item-display'>
+        <% @carts.each do |cart|%>
+          <div class = 'items'>
+              <% item_find = item_finder(cart) %>
+              <h2>Item Name: <%= item_find %> </h2>
+              <h2>Quantity: <%= cart.quantity %> </h2>
+              <h2>Subtotal: <%= cart.subtotal %> </h2>
+              <% if policy(cart).update? %>
+                <div class = 'plus'>
+                    <span><%= button_to '+',{controller: 'carts', action:'update', id: params[:id],
+                    item_id: cart.item_id, status: true, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %></span>
+                    <span><%= button_to '-',{controller: 'carts', action:'update', id: params[:id],
+                    item_id: cart.item_id, status: false, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-secondary' %></span>
+                </div>
+                <%= button_to 'Remove item from cart',{controller: 'carts', action:'update', id: params[:id], remove: true,
+                item_id: cart.item_id, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %>
+                <br>
+              <%end%>
+          </div>
+        <%end%>
+    </div>
+    <h3>Total: <%= @total %></h3>
+    <br>
+    <%= button_to 'Checkout',{controller: 'carts', action:'customvalid', id: params[:id], restaurant_id: params[:restaurant_id] }, class: 'btn btn-primary' %>
+  <%elsif @carts.blank?%>
+    <h4>No items in cart.</h4>
+  <%end%>
+</div>

@@ -1,0 +1,17 @@
+<div class = 'show'>
+  <div class= 'item-display'>
+    <% @categories.each do |cat|%>
+        <div class = 'items1'>
+          <h2>Title: <%= cat.name %></h2>
+          <%= link_to 'items' , restaurant_category_items_path(category_id: cat.id), class: 'link' %>
+          <% if policy(cat).destroy? %>
+            <%= link_to 'delete', restaurant_category_path(id: cat.id), method: :delete, data: {confirm: 'Are you sure biradar!'}, class: 'link' %>
+          <% end %>
+        </div>
+    <%end%>
+  </div>
+  <br>
+  <%if current_user&.admin?%>
+    <%= link_to 'new', new_restaurant_category_path, class: 'link'%>
+  <% end %>
+</div>

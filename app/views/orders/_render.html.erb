@@ -1,0 +1,23 @@
+<div class= 'show'>
+  <%if @orders.present? %>
+    <h1>Orders</h1>
+    <div class = 'item-display'>
+      <% @orders.each do |order|%>
+        <div class = 'orders'>
+          <% if policy(order).show? %>
+            <% if order_present?(current_user,order) %>
+              <h2>Order No. <%= order.id %></h2>
+              <h4>Status: <%= order.status%></h4>
+              <%= link_to 'Show', restaurant_order_path(id: order.id, restaurant_id: order.restaurant_id) ,class: 'link'%>
+            <%elsif order_admin?(current_user,order) %>
+              <h2>Order No. <%= order.id %></h2>
+              <h4><%= order.status%></h4>
+              <%= link_to 'Show', restaurant_order_path(id: order.id, restaurant_id: order.restaurant_id), class: 'link'%>
+            <% end %>
+          <%end%>
+        </div>
+      <%end%>
+    </div>
+  <%end%>
+</div>
+

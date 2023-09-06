@@ -1,0 +1,42 @@
+<div class= 'show'>
+  <div class = 'item-display'>
+    <% @items.each do |item|%>
+      <div class = 'items1'>
+        <%if item.available %>
+          <h2>Title: <%= item.title %></h2>
+          <h3>Description: </h3>
+          <p><%= item.description %></p>
+          <h3>Price</h3>
+          <p><%= item.price %></p>
+          <%if policy(item).show? %>
+            <%= button_to "Add item to cart", { :controller => "carts", :action => "update",
+                :item_id => item.id, id: current_user.present? ? current_user.id : guest_user, :restaurant_id=> item.restaurant_id}, method: :patch,
+                class: 'btn btn-primary' %>
+          <%end%>
+          <div class = 'img'>
+                <%= image_tag(item.image) if item.image.present?%>
+          </div>
+        <%elsif !item.available && current_user&.admin? %>
+          <h2>Title: <%= item.title %></h2>
+          <h3>Description: </h3>
+          <p><%= item.description %></p>
+          <h3>Price</h3>
+          <p><%= item.price %></p>
+        <%end%>
+        <% if policy(item).destroy? %>
+          <%= link_to 'edit item', edit_restaurant_category_item_path(id: item.id), class: 'link'%>
+          <%= link_to 'Delete item', restaurant_category_item_path(id: item.id), method: :delete, data:{confirm: 'Are you sure bhaijan!'}, class: 'link'%>
+          <% if item.available%>
+            <%= button_to "Retire Item", { :controller => "items", :action => "retire", :id => item.id}, class: 'btn btn-danger' %>
+          <% else %>
+            <%= button_to "Avail Item", { :controller => "items", :action => "retire", :id => item.id}, class: 'btn btn-danger'%>
+          <%end%>
+        <%end%>
+      </div>
+    <%end%>
+  </div>
+  <br>
+  <% if item_nil?(current_user,@items) %>
+    <%= link_to 'New item', new_restaurant_category_item_path, class: 'link'%>
+  <%end%>
+</div>

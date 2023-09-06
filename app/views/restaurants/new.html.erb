@@ -1,0 +1,15 @@
+<div class= 'show'>
+  <h2>New Restaurant</h2>
+  <% if @restaurant.errors.any?%>
+    <%= render partial: './partial/errors', locals: {restaurant: @restaurant} %>
+  <%end%>
+  <%= form_for @restaurant, url: {action: "create"}  do |f| %>
+    <%= f.label :name%><br>
+    <%= f.text_field :name%><br>
+    <br>
+    <div class = 'actions'>
+      <%= f.submit%>
+    </div>
+  <%end%>
+  <%= link_to 'Back', :back, class: 'link'%>
+</div>

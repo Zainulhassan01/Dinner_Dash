@@ -1,0 +1,162 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+ @import "bootstrap"; 
+
+ html{
+    margin :0,0;
+}
+body{
+    text-align: center;
+}
+.home, .item-show{
+    margin-left: 25%;
+    border: 5px solid gray;
+    padding: 3%;
+    width: 50%;
+    height: 40%;
+    box-shadow: 5px 10px 18px grey;
+    margin-top: 10%;
+}
+header{
+    margin: 0,0;
+}
+.link {
+    text-decoration: none;
+    padding:0 1%;
+}
+.show{
+    text-align: center;
+}
+.item-display{
+    display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.items{
+    flex-basis: 15%;
+    text-align: center;
+}
+.orders{
+    padding: 2% 0;
+    border: 5px solid gray;
+    box-shadow: 5px 10px 18px grey;
+    flex-basis: 30%;
+    text-align: center;
+    margin-top: 2%;
+    margin-right: 2%;
+}
+.plus{
+    display: inline-flex;
+    /* margin: 5% 5%; */
+}
+span { 
+    margin-right: 2%;
+}
+
+.img img{
+    width: 60%;
+    height: 60%;
+    margin: 3% 0;
+}
+.img1 img{
+    width: 30%;
+    height: 30%;
+    margin: 5% 0;
+}
+.login, .item{
+    margin-left: 25%;
+    border: 5px solid gray;
+    padding: 3%;
+    width: 50%;
+    box-shadow: 5px 10px 18px grey;
+}
+.login{
+    margin: 10% 25%;
+}
+
+.link1{
+    text-decoration: none;
+    margin: 3% 3%;
+    color: grey;
+}
+
+.link2{
+    text-decoration: none;
+    margin: 3% 3%;
+    color: brown;   
+}
+.error{
+    margin-top: 3%;
+}
+.notice{
+    margin-top: 3%;
+    color: green;
+}
+.alert{
+    margin-top: 3%;
+    color: red;
+}
+.alerts{
+    color: red;
+}
+ul.list{
+    list-style-type: none;
+}
+.show li{
+    list-style-type: none;   
+}
+.cat {
+    padding: 3%;
+}
+.check{
+    padding: 10px;
+}
+.item input{
+    margin: 5px;
+    width: 25%;
+}
+.item label{
+    margin-right: 1%;
+}
+.pop{
+    width:40%;
+    margin-left: 35%;
+    background-color: lightcoral;
+    padding: 2% 0;
+}
+.items1{
+    flex-basis: 15%;
+    text-align: center;
+    border: 4px solid gray;
+    padding: 3% 0;
+    margin: 2% 2%;
+}
+.field label{
+    padding: 1%;
+}
+.actions input{
+    margin: 2% 0;
+    padding: 10px 18px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.login a{
+    text-decoration: none;
+    color: grey;
+}
