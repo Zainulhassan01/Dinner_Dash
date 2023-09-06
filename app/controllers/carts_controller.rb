@@ -16,8 +16,7 @@ class CartsController < ApplicationController
     session[:cart][params[:item_title]] = 1
     if current_user
       item = Item.find_by(title: params[:item_title])
-      cart = Cart.create!(item_id: item.id, user_id: current_user.id, quantity: 1, subtotal: item.price * 1)
-      authorize cart
+      Cart.create!(item_id: item.id, user_id: current_user.id, quantity: 1, subtotal: item.price * 1)
     end
     flash[:notice] = 'Item has been added.'
     redirect_back(fallback_location: root_path)
@@ -52,7 +51,7 @@ class CartsController < ApplicationController
 
   def destroy
     session.delete(:cart)
-    Cart.delete_all
+    Cart.where(user_id: current_user.id).delete_all
     flash[:notice] = 'Cart has been cleared.'
     redirect_to root_path
   end
