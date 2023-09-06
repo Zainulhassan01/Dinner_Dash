@@ -1,0 +1,13 @@
+---
+development:
+  cloud_name: dm3rlmzrh
+  api_key: '363783142116114'
+  api_secret: ri5UHsKrdJZA3UqmqSVYIFZrIsA
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: dm3rlmzrh
+  api_key: '363783142116114'
+  api_secret: ri5UHsKrdJZA3UqmqSVYIFZrIsA
+  enhance_image_tag: true
+  static_file_support: true

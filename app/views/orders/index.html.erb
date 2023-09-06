@@ -13,14 +13,3 @@
       <%= render partial: "render", locals: {order: @orders}%>
     </div>
 </div>
-<script>
-document.querySelector('select').addEventListener('change', function(e){
-    var status = document.getElementById("Filter");
-    var index = status.options[status.selectedIndex].value;
-    console.log(index)
-    $.ajax({
-      url: '/search',
-      data: {status: index}
-      });
-  })
-</script>

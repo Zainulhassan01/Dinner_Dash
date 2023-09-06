@@ -28,8 +28,8 @@ development:
   database: myapp_development
   host: localhost
   pool: 5
-  username: myapp
-  password: secret
+  username: postgres
+  password: postgres
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
@@ -87,5 +87,3 @@ test:
 production:
   <<: *default
   database: myapp_production
-  username: myapp
-  password: <%= ENV['MYAPP_DATABASE_PASSWORD'] %>
