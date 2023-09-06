@@ -6,3 +6,4 @@ Things you may want to install to run:
 
 * Rails 5.2
 
+* run bundle install

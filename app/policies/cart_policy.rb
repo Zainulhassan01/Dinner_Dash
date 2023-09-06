@@ -2,7 +2,7 @@
 
 class CartPolicy < ApplicationPolicy
     def index?
-      true
+      user ? true : User.last.id + 1
     end
   
     def update?
