@@ -35,7 +35,7 @@ class CategoriesController < ApplicationController
   private
 
   def find_restaurant
-    @restaurant = Restaurant.find(params[:restaurant_id])
+    @restaurant = Restaurant.includes(:categories).find(params[:restaurant_id])
   end
 
   def find_category
