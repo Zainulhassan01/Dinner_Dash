@@ -11,7 +11,7 @@ module RestaurantsHelper
     orders.count >= 7
   end
 
-  def item_in_cart?(item)
+  def item_in_session?(item)
     if session[:cart].present?
       session[:cart].each do |cart|
         return true if item == cart[0]

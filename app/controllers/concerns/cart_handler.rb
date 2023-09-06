@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-
 # Cart helper
 module CartHandler
+  def removeitem(item)
+    cart = Cart.find_by(item_id: item.id)
+    Cart.delete(cart.id)
+  end
+
   def create_order_according_to_cart(carts, total)
     carts.each do |cart|
       item = Item.find_by(title: cart[0])

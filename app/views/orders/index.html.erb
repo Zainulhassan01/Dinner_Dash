@@ -17,7 +17,6 @@
 document.querySelector('select').addEventListener('change', function(e){
     var status = document.getElementById("Filter");
     var index = status.options[status.selectedIndex].text;
-    console.log(index)
     $.ajax({
       url: '/search',
       data: {status: index}

@@ -1,9 +1,19 @@
+<% @carts.each do |cart|%>
+    <div class = 'items'>
+        <% item = item_finder(cart) %>
+        <h2>Item Name: <%= cart[0]%> </h2>
+        <h2>Quantity: <%= cart[1]%> </h2>
+        <h2>Subtotal: <%= item.price * cart[1]%> </h2>
+        <div class = 'plus'>
+            <button class = 'btnclick' onclick = "update_cart('<%= item.title %>', 'true')" > + </button>
+            <button class = 'btnclick' onclick = "update_cart('<%= item.title %>', 'false')" > - </button>
+        </div>
+        <br>
+        <%= button_to 'Remove item from cart',{controller: 'carts', action:'update', id: current_user.present? ? current_user.id : User.last.id + 1, remove: true,
+            item_title: item.title, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %>
+        <br>
+    </div>
+<%end%>
 <div>
-    <%byebug%>
-    <% @carts.each do |cat|%>
-        <%if cat == locals[:cart] %>
-            <h2>Quantity: <%= cat.quantity %> </h2>
-            <h2>Subtotal: <%= cat.subtotal %> </h2>
-        <%end%>
-    <%end%>
+    <h3>Total: <%= find_total(@carts) %></h3>  
 </div>

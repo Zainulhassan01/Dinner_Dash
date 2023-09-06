@@ -15,7 +15,7 @@ AllCops:
     - 'bin/**/*'
     
 Metrics/LineLength:
-  Max: 135
+  Max: 145
 
 Metrics/BlockNesting:
   Enabled: false

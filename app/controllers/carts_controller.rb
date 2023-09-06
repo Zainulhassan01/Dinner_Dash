@@ -6,21 +6,20 @@ class CartsController < ApplicationController
   before_action :find_item, only: %i[create update]
   before_action :authenticate_user!, only: %i[checkout]
   before_action :find_cart, only: %i[update]
+  after_action :update_cart, only: %i[update quantity]
 
   def index
     @carts = session[:cart].presence ? session[:cart] : nil
-    if current_user
-      byebug
-      @carts = cart_to_session
-    end
-    # change view for log in user to render their prev cart
-    # authorize @carts
+    # handle multiple items with same name in cart
+    @carts = cart_to_session if current_user
+    # byebug
   end
 
   def create
-    session[:cart][@item.title] = 1
+    session[:cart][params[:item_title]] = 1
     if current_user
-      cart = Cart.create!(item_id: @item.id, user_id: current_user.id, quantity: 1, subtotal: @item.price * 1)
+      item = Item.find_by(title: params[:item_title])
+      cart = Cart.create!(item_id: item.id, user_id: current_user.id, quantity: 1, subtotal: item.price * 1)
       authorize cart
     end
     flash[:notice] = 'Item has been added.'
@@ -28,26 +27,29 @@ class CartsController < ApplicationController
   end
 
   def update
-    if session[:cart][@item.title].present?
-      session[:cart][@item.title] = quantity_updation(params[:status])
-      to_boolean(params[:remove]) ? session[:cart].delete(@item.title) && redirect_back(fallback_location: root_path) && return : nil
-      check_count?(session[:cart][@item.title]) ? redirect_back(fallback_location: root_path) && return : nil
-
-      if current_user
-        @cart.update!(item_id: @item.id, user_id: current_user.id, quantity: session[:cart][@item.title],
-                      subtotal: @item.price * session[:cart][@item.title])
-        authorize @cart
-      end
-      redirect_back(fallback_location: root_path)
+    if session[:cart][params[:item_title]].present?
+      to_boolean(params[:remove]) ? session[:cart].delete(params[:item_title]) && redirect_back(fallback_location: root_path) && return : nil
     else
       create
     end
   end
 
+  def quantity
+    count = quantity_updation(params[:status])
+    session[:cart][params[:item_title]] = count
+    check_count?(session[:cart][params[:item_title]])
+    @carts = session[:cart]
+  end
+
   def checkout
-    # authorize @carts
+    @carts = session[:cart]
+    @carts.each do |cart|
+      item = Item.find_by(title: cart[0])
+      Cart.create!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][item.title],
+                   subtotal: item.price * session[:cart][item.title])
+    end
     create_order_according_to_cart(session[:cart], params[:total])
-    Cart.delete_all
+    Cart.where(user_id: current_user.id).delete_all
     redirect_to root_path, notice: 'Order has been placed.' if session.delete(:cart)
   end
 
@@ -65,27 +67,35 @@ class CartsController < ApplicationController
   end
 
   def quantity_updation(status)
-    count = session[:cart][@item.title]
+    count = session[:cart][params[:item_title]]
     to_boolean(status) ? count += 1 : count -= 1
     count
   end
 
   def find_cart
     session[:cart] ||= {} if session[:cart].nil?
-    @cart = Cart.find_by(item_id: params[:item_id])
+    item = Item.find_by(title: params[:item_title])
+    @restaurant_id = item.restaurant_id
   end
 
   def check_count?(count)
-    if count.zero?
-      session[:cart].delete(@item.title)
-      return true
+    session[:cart].delete(params[:item_title]) if count.zero?
+  end
+
+  def update_cart
+    item = Item.find_by(title: params[:item_title])
+    to_boolean(params[:remove]) ? removeitem(item) && return : nil
+
+    cart = Cart.find_by(item_id: item.id)
+    if current_user
+      cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
+                   subtotal: item.price * session[:cart][params[:item_title]].to_i)
     end
-    false
   end
 
   def cart_to_session
     session[:cart] ||= {} if session[:cart].nil?
-    @carts = Cart.all.where(user_id: current_user.id)
+    @carts = Cart.where(user_id: current_user.id)
     @carts.each do |cart|
       item = Item.find_by(id: cart.item_id)
       session[:cart][item.title] = cart.quantity
