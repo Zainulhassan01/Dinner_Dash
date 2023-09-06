@@ -1,5 +1,8 @@
 {
   "name": "Dinner_dashv2",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "bootstrap": "5.0.0-beta2",
+    "jquery": "^3.6.0"
+  }
 }

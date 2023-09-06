@@ -1,0 +1,42 @@
+<div class = 'show'>
+  <% if !@error %>
+    <h1><%=@restaurant.name%></h1>
+    <%= link_to 'Categories', restaurant_categories_path(@restaurant.id), class: 'link'%>
+    <% if @items.nil? ==  false %>
+      <h2>Items</h2>
+      <div class = 'item-display'>
+        <% @items.each do |item|%>
+          <%if item.available %>
+            <div class = 'items1' >
+              <h2>Title: <%= item.title %></h2>
+              <%if popular_item?(item)%>
+                <p class= 'pop'>Popular</p>
+              <%end%>
+              <h3>Description: </h3>
+              <p><%= item.description %></p>
+              <h3>Price</h3>
+              <p><%= item.price %></p>
+              <div class = 'img'>
+                <%= image_tag(item.image) if item.image.present?%>
+              </div>
+              <% if policy(item).show? %>
+                <%= button_to "Add item to cart", { :controller => "carts", :action => "update",
+                :item_id => item.id, id: current_user.present? ? current_user.id : guest_user, :restaurant_id=> @restaurant.id}, method: :patch,
+                class: 'btn btn-primary' %>
+              <%end%>
+            </div>
+          <%end%>
+        <%end%>
+      </div>
+    <%end%>
+  <%else%>
+    <%= render partial: "./partial/error", locals: {error: @error}%>
+  <%end%>
+  <% if current_user&.admin? %>
+    <%= link_to 'Show user orders', restaurant_orders_path(restaurant_id: @restaurant.id, user_id: current_user.id, admin: current_user.admin), class: 'link2'%>
+  <%elsif current_user %>
+    <%= link_to 'Show only user orders', restaurant_orders_path(restaurant_id: @restaurant.id, user_id: current_user.id, admin: current_user.admin), class: 'link2'%>
+  <%end%>
+  <br>
+  <%= link_to "Back", :back, class: 'link' %>
+</div>

@@ -1,0 +1,10 @@
+<div class = 'item-show'>
+  <h2>Title: <%= @item.title %></h2>
+  <h4> Description: </h4>
+  <p><%= @item.description %></p>
+  <p><b>Price:</b> <%= @item.price %></p>
+  <div class = 'img1'>
+    <%= image_tag(@item.image) if @item.image.present?%>
+  </div>
+  <%=link_to 'Back', :back, class: 'link'%>
+</div>

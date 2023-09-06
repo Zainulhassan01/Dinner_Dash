@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>DinnerDashv2</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +12,11 @@
   </head>
 
   <body>
+     <%= render './partial/navbar'%>
     <%= yield %>
+    <div class = 'error'>
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+    </div>
   </body>
 </html>

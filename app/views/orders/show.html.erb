@@ -1,0 +1,37 @@
+<div class = 'show'>
+  <div class ='item-display'>
+    <% if @itemorders.present? %>
+      <% @itemorders.each do |itemorder|%>
+        <div class = 'items1'>
+          <h3>Item Title:</h3>
+          <p><%= find_item_name(itemorder.item_id)%></p>
+          <h4>Item Quantity:</h4>
+          <p><%= itemorder.quatity%></p>
+          <h4>Item Subtotal:</h4>
+          <p><%= itemorder.subtotal%></p>
+          <%= link_to 'Show item', restaurant_order_item_path(id: itemorder.item_id, order_id: @order.id, restaurant_id: @order.restaurant_id)%>
+          <br>
+        </div>
+      <%end%> 
+  </div>
+      <% if @order.status == 'ordered' && current_user.admin? && policy(@order).update? %>
+          <div class = 'plus'>
+            <span><%= button_to "Completed", { controller: "orders", action: "update", id: @order.id, status: 1},method: :patch, class: 'btn btn-primary' %></span>
+            <span><%= button_to "Canceled", { controller: "orders", action: "update", id: @order.id, status: 2 }, method: :patch, class: 'btn btn-danger' %></span>
+          </div>
+        <%else%>
+          <h2>Current Order Status: <%=@order.status%></h2>
+          <h5>Created at:</h5>
+          <ul> 
+            <li> Date: <%=@order.created_at.strftime("%d %b. %Y")%> </li>
+            <li> Time: <%=@order.created_at.strftime("%H:%M")%> </li>
+          </ul>
+          <h5>Updated at:</h5>
+          <ul> 
+            <li> Date: <%=@order.updated_at.strftime("%d %b. %Y")%> </li>
+            <li> Time: <%=@order.updated_at.strftime("%H:%M")%> </li>
+          </ul>
+      <%end%>
+    <%end%>
+  <br>
+</div>

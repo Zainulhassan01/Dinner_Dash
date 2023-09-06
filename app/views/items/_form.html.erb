@@ -1,0 +1,38 @@
+<%= form_for @item, url: {action: locals[:action_name] }  do |form| %>
+  <% if @item.errors.any? %>
+    <%= render partial: './partial/errors', locals: {restaurant: @item}%>
+  <% end %>
+  <div class = 'item'>
+    <div class="field">
+      <%= form.label :title %>
+      <%= form.text_field :title %>
+    </div>
+
+    <div class="field">
+      <%= form.label :description %>
+      <%= form.text_area :description %>
+    </div>
+
+    <div class="field">
+      <%= form.label :price %>
+      <%= form.text_area :price %>
+    </div>
+
+    <div class="field">
+      <%= form.label :image %>
+      <%= form.file_field :image %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit%>
+    </div>
+  </div>  
+  <div class = 'cat'>
+    <% @categories.each do |cat| %>
+      <div class = 'check'>
+        <%= check_box_tag 'names[]',cat.name,(:checkb) %>
+        <%= label_tag(:cat, "Add item to  #{cat.name}.") %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
