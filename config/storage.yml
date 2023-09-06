@@ -6,7 +6,7 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 cloudinary:
-  service: Cloudinary
+  service: cloudinary
   cloud_name: <%= ENV['dm3rlmzrh'] %>
   api_key:    <%= ENV['363783142116114'] %>
   api_secret: <%= ENV['ri5UHsKrdJZA3UqmqSVYIFZrIsA'] %>
