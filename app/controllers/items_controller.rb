@@ -5,6 +5,7 @@ class ItemsController < ApplicationController
   before_action :find_category, only: %i[index create]
   before_action :find_item, only: %i[edit update show destroy retire]
   before_action :find_item_category, only: %i[new create edit]
+
   def index
     @items = @category.items
     authorize @items
@@ -19,7 +20,7 @@ class ItemsController < ApplicationController
     @item = @category.items.new(item_params.merge(restaurant_id: params[:restaurant_id]))
     authorize @item
     if @item.save
-      create_itemcategory(@item, params[:names], params[:restaurant_id])
+      Item.create_item_category(@item, params[:names], params[:restaurant_id])
       redirect_to restaurant_category_items_path
     else
       render 'new'
@@ -35,7 +36,7 @@ class ItemsController < ApplicationController
   def update
     authorize @item
     if @item.update!(item_params)
-      create_item_category(@item, params[:names], params[:restaurant_id])
+      Item.create_item_category(@item, params[:names], params[:restaurant_id])
       redirect_to restaurant_category_items_path
     else
       render 'edit'
@@ -63,13 +64,6 @@ class ItemsController < ApplicationController
   def find_item
     @item = Item.find(params[:id])
     @categories = Category.all
-  end
-
-  def create_item_category(item, names, resturant)
-    names.each do |name|
-      category = Category.find_by(name: name, restaurant_id: resturant)
-      ItemCategory.create!(item_id: item.id, category_id: category.id)
-    end
   end
 
   def find_category

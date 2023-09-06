@@ -30,7 +30,8 @@ class RestaurantsController < ApplicationController
     if @restaurant
       @items = @restaurant.items
     else
-      @error = @restaurant.errors.full_messages
+      flash[:alert] = @restaurant.errors.full_messages
+      redirect_to(request.referer || root_path)
     end
   end
 

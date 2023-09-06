@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# carts controller
 class CartsController < ApplicationController
   include CartHandler
   before_action :find_item, only: %i[create update]
@@ -10,8 +11,8 @@ class CartsController < ApplicationController
 
   def index
     if current_user.present?
-      check = Cart.cart_find
-      @carts, @total = CartService.new(check, params[:id]).call
+      check_for_nul = Cart.cart_find
+      @carts, @total = CartService.new(check_for_nul, params[:id]).call
     else
       @carts = Cart.cart_find
       @total = Cart.all.sum(:subtotal)

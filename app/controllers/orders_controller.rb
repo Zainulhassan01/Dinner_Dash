@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
   @@restaurant_id = 0
 
   def index
-    @orders = if isAdmin?
+    @orders = if admin?
                 Order.find_orders_of_restaurant(params[:restaurant_id])
               else
                 Order.find_orders_of_user(params[:user_id], params[:restaurant_id])
@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
     @itemorders = Order.find_orders_in_item_order(params[:id])
   end
 
-  def isAdmin?
+  def admin?
     User.find(params[:user_id]).admin?
   end
 
