@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
     @item = @category.items.new(item_params.merge(restaurant_id: params[:restaurant_id]))
     authorize @item
     if @item.save
-      Item.create_item_category(@item, params[:names], params[:restaurant_id])
+      ItemCategory.create_item_category(@item, params[:names], params[:restaurant_id])
       redirect_to restaurant_category_items_path
     else
       render 'new'
@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
   def update
     authorize @item
     if @item.update!(item_params)
-      Item.create_item_category(@item, params[:names], params[:restaurant_id])
+      ItemCategory.create_item_category(@item, params[:names], params[:restaurant_id])
       redirect_to restaurant_category_items_path
     else
       render 'edit'

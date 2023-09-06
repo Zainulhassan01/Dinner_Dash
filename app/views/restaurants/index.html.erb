@@ -8,10 +8,10 @@
   <% end %>
   <% if current_user&.admin? %>
     <h2> User is an admin </h2>
-    <%= render partial: "names", locals: {restaurant: @restaurants, current_user: current_user} %>
+    <%= render partial: 'names', locals: {restaurant: @restaurants, current_user: current_user} %>
   <% elsif current_user %>
-    <%= render partial: "names", locals: {restaurant: @restaurants, current_user: current_user} %>
+    <%= render partial: 'names', locals: {restaurant: @restaurants, current_user: current_user} %>
   <% else %>
-    <%= render partial: "names", locals: {restaurant: @restaurants, current_user: current_user} %>
+    <%= render partial: 'names', locals: {restaurant: @restaurants, current_user: current_user} %>
   <% end %>
 </div>

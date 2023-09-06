@@ -3,27 +3,27 @@
     <%= render partial: './partial/errors', locals: {restaurant: @item}%>
   <% end %>
   <div class = 'item'>
-    <div class="field">
+    <div class='field'>
       <%= form.label :title %>
       <%= form.text_field :title %>
     </div>
 
-    <div class="field">
+    <div class='field'>
       <%= form.label :description %>
       <%= form.text_area :description %>
     </div>
 
-    <div class="field">
+    <div class='field'>
       <%= form.label :price %>
       <%= form.text_area :price %>
     </div>
 
-    <div class="field">
+    <div class='field'>
       <%= form.label :image %>
       <%= form.file_field :image %>
     </div>
 
-    <div class="actions">
+    <div class='actions'>
       <%= form.submit%>
     </div>
   </div>  

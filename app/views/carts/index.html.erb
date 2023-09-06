@@ -5,27 +5,25 @@
     <div class ='item-display'>
         <% @carts.each do |cart|%>
           <div class = 'items'>
-              <% item_find = item_finder(cart) %>
-              <h2>Item Name: <%= item_find %> </h2>
-              <h2>Quantity: <%= cart.quantity %> </h2>
-              <h2>Subtotal: <%= cart.subtotal %> </h2>
-              <% if policy(cart).update? %>
+              <% item = item_finder(cart) %>
+              <h2>Item Name: <%= cart[0]%> </h2>
+              <h2>Quantity: <%= cart[1]%> </h2>
+              <h2>Subtotal: <%= item.price * cart[1]%> </h2>
                 <div class = 'plus'>
                     <span><%= button_to '+',{controller: 'carts', action:'update', id: params[:id],
-                    item_id: cart.item_id, status: true, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %></span>
+                    item_id: item.id, status: true, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %></span>
                     <span><%= button_to '-',{controller: 'carts', action:'update', id: params[:id],
-                    item_id: cart.item_id, status: false, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-secondary' %></span>
+                    item_id: item.id, status: false, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-secondary' %></span>
                 </div>
                 <%= button_to 'Remove item from cart',{controller: 'carts', action:'update', id: params[:id], remove: true,
-                item_id: cart.item_id, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %>
+                item_id: item.id, restaurant_id: params[:restaurant_id] },method: :patch, class: 'btn btn-primary' %>
                 <br>
-              <%end%>
           </div>
         <%end%>
     </div>
-    <h3>Total: <%= @total %></h3>
+    <h3>Total: <%= find_total(@carts) %></h3>  
     <br>
-    <%= button_to 'Checkout',{controller: 'carts', action:'checkout', id: params[:id], restaurant_id: params[:restaurant_id] }, class: 'btn btn-primary' %>
+    <%= button_to 'Checkout',{controller: 'carts', action:'checkout',total: find_total(@carts) }, class: 'btn btn-primary' %>
   <%elsif @carts.blank?%>
     <h4>No items in cart.</h4>
   <%end%>

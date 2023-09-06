@@ -16,11 +16,15 @@
   </div>
       <% if @order.status == 'ordered' && current_user.admin? && policy(@order).update? %>
           <div class = 'plus'>
-            <span><%= button_to "Completed", { controller: "orders", action: "update", id: @order.id, status: "completed"},method: :patch, class: 'btn btn-primary' %></span>
-            <span><%= button_to "Canceled", { controller: "orders", action: "update", id: @order.id, status: "cancelled" }, method: :patch, class: 'btn btn-danger' %></span>
+            <span><%= button_to 'Completed', { controller: 'orders', action: 'update', id: @order.id, status: 'completed' },method: :patch,
+                      data:{confirm: 'Are you sure bhaijan!'}, class: 'btn btn-primary' %></span>
+            <span><%= button_to 'Canceled', { controller: 'orders', action: 'update', id: @order.id, status: 'cancelled' }, method: :patch,
+                      data:{confirm: 'Are you sure bhaijan!'}, class: 'btn btn-danger' %></span>
           </div>
         <%else%>
-          <h2>Current Order Status: <%=@order.status%></h2>
+          <%user = User.find_by(id: @order.user_id)%>
+          <h1> Ordered by: <%= user.full_name %></h1>
+          <h3>Current Order Status: <%=@order.status%></h3>
           <h5>Created at:</h5>
           <ul> 
             <li> Date: <%=@order.created_at.strftime("%d %b. %Y")%> </li>

@@ -1,0 +1,9 @@
+<div>
+    <%byebug%>
+    <% @carts.each do |cat|%>
+        <%if cat == locals[:cart] %>
+            <h2>Quantity: <%= cat.quantity %> </h2>
+            <h2>Subtotal: <%= cat.subtotal %> </h2>
+        <%end%>
+    <%end%>
+</div>

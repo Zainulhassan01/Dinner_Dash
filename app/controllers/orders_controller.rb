@@ -7,9 +7,9 @@ class OrdersController < ApplicationController
 
   def index
     @orders = if admin?
-                Order.find_orders_of_restaurant(params[:restaurant_id])
+                Order.restaurant_orders(params[:restaurant_id])
               else
-                Order.find_orders_of_user(params[:user_id], params[:restaurant_id])
+                Order.user_orders(params[:user_id], params[:restaurant_id])
               end
     authorize @orders
     @@restaurant_id = params[:restaurant_id]
@@ -18,10 +18,6 @@ class OrdersController < ApplicationController
   def show
     authorize @order
     @itemorders = Order.find_orders_in_item_order(params[:id])
-  end
-
-  def admin?
-    User.find(params[:user_id]).admin?
   end
 
   def update
@@ -37,9 +33,9 @@ class OrdersController < ApplicationController
 
   def search
     @orders = if params[:status].present? && params[:status] != 'Filter'
-                Order.find_order_according_to_status(params[:status], @@restaurant_id)
+                Order.all.where(status: params[:status], restaurant_id: @@restaurant_id)
               else
-                Order.find_orders_of_restaurant(@@restaurant_id)
+                Order.restaurant_orders(@@restaurant_id)
               end
     authorize @orders
   end
@@ -48,5 +44,9 @@ class OrdersController < ApplicationController
 
   def find_order
     @order = Order.find(params[:id])
+  end
+
+  def admin?
+    User.find(params[:user_id]).admin?
   end
 end

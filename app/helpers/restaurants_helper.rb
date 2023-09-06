@@ -10,4 +10,13 @@ module RestaurantsHelper
     orders = ItemOrder.all.where(item_id: item.id)
     orders.count >= 7
   end
+
+  def item_in_cart?(item)
+    if session[:cart].present?
+      session[:cart].each do |cart|
+        return true if item == cart[0]
+      end
+    end
+    false
+  end
 end

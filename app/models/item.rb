@@ -17,13 +17,6 @@ class Item < ApplicationRecord
 
   scope :find_category_items, ->(restaurant_id) { Category.all.where(restaurant_id: restaurant_id) }
 
-  def self.create_item_category(item, names, resturant)
-    names.each do |name|
-      category = Category.find_by(name: name, restaurant_id: resturant)
-      ItemCategory.create!(item_id: item.id, category_id: category.id)
-    end
-  end
-
   private
 
   def add_default_cover
