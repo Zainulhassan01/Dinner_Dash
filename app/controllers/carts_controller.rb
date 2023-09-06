@@ -9,6 +9,11 @@ class CartsController < ApplicationController
 
   def index
     @carts = session[:cart].presence ? session[:cart] : nil
+    if current_user
+      byebug
+      @carts = cart_to_session
+    end
+    # change view for log in user to render their prev cart
     # authorize @carts
   end
 
@@ -24,7 +29,8 @@ class CartsController < ApplicationController
 
   def update
     if session[:cart][@item.title].present?
-      session[:cart][@item.title] = quantity_updation(params[:status], params[:remove])
+      session[:cart][@item.title] = quantity_updation(params[:status])
+      to_boolean(params[:remove]) ? session[:cart].delete(@item.title) && redirect_back(fallback_location: root_path) && return : nil
       check_count?(session[:cart][@item.title]) ? redirect_back(fallback_location: root_path) && return : nil
 
       if current_user
@@ -58,10 +64,9 @@ class CartsController < ApplicationController
     @item = Item.find_by(id: params[:item_id])
   end
 
-  def quantity_updation(status, remove)
+  def quantity_updation(status)
     count = session[:cart][@item.title]
     to_boolean(status) ? count += 1 : count -= 1
-    to_boolean(remove) ? session[:cart].delete(@item.title) : nil
     count
   end
 
@@ -76,5 +81,15 @@ class CartsController < ApplicationController
       return true
     end
     false
+  end
+
+  def cart_to_session
+    session[:cart] ||= {} if session[:cart].nil?
+    @carts = Cart.all.where(user_id: current_user.id)
+    @carts.each do |cart|
+      item = Item.find_by(id: cart.item_id)
+      session[:cart][item.title] = cart.quantity
+    end
+    session[:cart]
   end
 end
