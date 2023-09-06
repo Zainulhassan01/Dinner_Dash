@@ -6,13 +6,12 @@ class CartsController < ApplicationController
   before_action :find_item, only: %i[create update]
   before_action :authenticate_user!, only: %i[customvalid]
   before_action :set_cart, only: %i[customvalid]
-  # Remove class variale
 
   def index
     # if Cart is not associated -> Associate cart to current user if user exist
     # else show cart with no user assigned.
     if current_user.present?
-      check = Cart.all.cart_find
+      check = Cart.cart_find
       if check.blank?
         @carts = Cart.all.user_cart(params[:id])
         @total = Cart.total(params[:id])
@@ -21,7 +20,7 @@ class CartsController < ApplicationController
         @total = check.sum(:subtotal)
       end
     else
-      @carts = Cart.all
+      @carts = Cart.cart_find
       @total = Cart.all.sum(:subtotal)
     end
     authorize @carts
@@ -69,9 +68,7 @@ class CartsController < ApplicationController
   # move this to a form_object or a service
   # move order creation logic to order_controller
   def customvalid
-    # before_action set_cart
     total = Cart.total(params[:id])
-    # rename to user_cart
     carts = Cart.all.user_cart(params[:id])
     authorize carts
     carts.each do |cart|
@@ -82,7 +79,6 @@ class CartsController < ApplicationController
     redirect_to root_path, notice: 'Order has been placed.' if Cart.where(user_id: params[:id]).delete_all
   end
 
-  # use destroy
   def destroy
     authorize Cart
     if current_user.nil?

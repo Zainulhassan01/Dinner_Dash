@@ -17,3 +17,13 @@
 //= require jquery3
 //= require popper
 //= require bootstrap
+
+$(function() {
+    $('select').on('change', function(e){
+        var index = $('#Filter option:selected').val();
+        $.ajax({
+          url: '/search',
+          data: {status: index}
+        });
+    });
+})
