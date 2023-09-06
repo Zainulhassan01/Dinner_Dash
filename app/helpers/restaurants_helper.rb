@@ -11,4 +11,3 @@ module RestaurantsHelper
     orders.count >= 7
   end
 end
-  

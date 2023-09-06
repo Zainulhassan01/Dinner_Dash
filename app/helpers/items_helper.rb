@@ -6,4 +6,3 @@ module ItemsHelper
     current_user&.admin? || items.nil?
   end
 end
-  

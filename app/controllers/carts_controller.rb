@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CartsController < ApplicationController
   include CartHandler
   before_action :find_item, only: %i[create update]
@@ -31,7 +33,8 @@ class CartsController < ApplicationController
       if item_present?(params[:item_id])
         quantity_updation(params[:status], @cart)
         subtotal = CartService.new(params[:remove], @item, @cart).update_cart
-        if @cart.update!(item_id: params[:item_id], user_id: current_user.present? ? current_user.id : nil, quantity: @cart.quantity, subtotal: subtotal)
+        if @cart.update!(item_id: params[:item_id], user_id: current_user.present? ? current_user.id : nil, quantity: @cart.quantity,
+                         subtotal: subtotal)
           authorize @cart
           redirect_back(fallback_location: root_path)
         end
@@ -70,7 +73,7 @@ class CartsController < ApplicationController
   end
 
   def update_cart
-    Cart.where('user_id is null').update_all(user_id: current_user.id) if current_user.present?# rubocop:disable Rails/SkipsModelValidations
+    Cart.where('user_id is null').update_all(user_id: current_user.id) if current_user.present? # rubocop:disable Rails/SkipsModelValidations
   end
 
   def find_total_carts

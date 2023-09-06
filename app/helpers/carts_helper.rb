@@ -7,4 +7,3 @@ module CartsHelper
     Item.all.find_by(id: item).title
   end
 end
-  

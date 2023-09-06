@@ -3,4 +3,3 @@
 # Mix helper
 module ApplicationHelper
 end
-  

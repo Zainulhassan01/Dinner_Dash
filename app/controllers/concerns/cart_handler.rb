@@ -12,7 +12,7 @@ module CartHandler
     order = Order.find_or_create_by(user_id: params[:id], restaurant_id: restaurant_id, status: 0, total: total.to_i)
     if order.new_record?
       ItemOrder.find_or_create_by!({ order_id: Order.last.id, quatity: cart.quantity.to_i, subtotal: cart.subtotal.to_i,
-                                      item_id: cart.item_id })
+                                     item_id: cart.item_id })
     else
       @orders = Cart.find_orders(restaurant_id)
       ItemOrder.create!({ order_id: @orders.last.id, quatity: cart.quantity.to_i, subtotal: cart.subtotal.to_i,
@@ -20,4 +20,3 @@ module CartHandler
     end
   end
 end
-  

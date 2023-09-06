@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# missing model level validation
 class ItemOrder < ApplicationRecord
   belongs_to :order
   belongs_to :item

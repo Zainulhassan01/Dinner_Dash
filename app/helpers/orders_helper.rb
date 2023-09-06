@@ -15,4 +15,3 @@ module OrdersHelper
     current_user && order.present? && current_user.id == order.user_id
   end
 end
-  

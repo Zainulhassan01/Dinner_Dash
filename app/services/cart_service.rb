@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 # cartindexservice
 class CartService
   attr_reader :args
+
   def initialize(*args)
-    if args.size == 2
+    case args.size
+    when 2
       @check = args[0]
-      @id = args[1]   
-    elsif args.size == 3
+      @id = args[1]
+    when 3
       @remove = args[0]
       @item = args[1]
       @cart = args[2]
