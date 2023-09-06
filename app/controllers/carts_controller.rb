@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# skim this controller + data seeding + deployment
+# skim cart,order controller, cart,order policy
 class CartsController < ApplicationController
   include CartHandler
   before_action :find_item, only: %i[create update]

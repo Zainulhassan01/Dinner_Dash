@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_182002) do
+ActiveRecord::Schema.define(version: 2021_09_21_082939) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_182002) do
   end
 
   create_table "carts", force: :cascade do |t|
-    t.decimal "quantity"
-    t.decimal "subtotal"
+    t.integer "quantity", null: false
+    t.integer "subtotal", null: false
     t.integer "item_id", null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_182002) do
   end
 
   create_table "item_orders", force: :cascade do |t|
-    t.decimal "quatity"
-    t.decimal "subtotal"
+    t.integer "quatity", null: false
+    t.integer "subtotal", null: false
     t.integer "order_id", null: false
     t.integer "item_id", null: false
     t.datetime "created_at", null: false
@@ -73,9 +73,9 @@ ActiveRecord::Schema.define(version: 2021_09_20_182002) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.decimal "price"
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "restaurant_id", default: 0, null: false
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_182002) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal "total"
-    t.decimal "status"
+    t.integer "total", null: false
+    t.integer "status", null: false
     t.integer "user_id", null: false
     t.integer "restaurant_id", null: false
     t.datetime "created_at", null: false
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_182002) do
   end
 
   create_table "restaurants", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
