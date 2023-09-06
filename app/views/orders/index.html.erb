@@ -5,7 +5,7 @@
   <% if @orders.present? && current_user.admin? && policy(@orders).search? %>
     <div id ="my_select">
       <%= form_tag(url: search_path, method: 'get', remote: true ) do%>
-      <%= select_tag('Filter', options_for_select([['Filter',1],['Ordered',2],['Completed',3],['Cancelled',4]])) %>
+      <%= select_tag('Filter', options_for_select([['Filter',1],['ordered',2],['completed',3],['cancelled',4]])) %>
       <%end%>
     </div>
   <%end%>
@@ -16,7 +16,7 @@
 <script>
 document.querySelector('select').addEventListener('change', function(e){
     var status = document.getElementById("Filter");
-    var index = status.options[status.selectedIndex].value;
+    var index = status.options[status.selectedIndex].text;
     console.log(index)
     $.ajax({
       url: '/search',

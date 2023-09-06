@@ -3,7 +3,7 @@
 # ApplicationController
 class ApplicationController < ActionController::Base
     include Pundit
-    include ExceptionHandler
+    # include ExceptionHandler
     include ApplicationHelper
     before_action :configure_permitted_parameters, if: :devise_controller?
   

@@ -13,7 +13,7 @@ class CartPolicy < ApplicationPolicy
       user ? true : User.last.id + 1
     end
   
-    def customvalid?
+    def checkout?
       user ? true : User.last.id + 1
     end
   

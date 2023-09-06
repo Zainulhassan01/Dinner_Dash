@@ -25,7 +25,7 @@
     </div>
     <h3>Total: <%= @total %></h3>
     <br>
-    <%= button_to 'Checkout',{controller: 'carts', action:'customvalid', id: params[:id], restaurant_id: params[:restaurant_id] }, class: 'btn btn-primary' %>
+    <%= button_to 'Checkout',{controller: 'carts', action:'checkout', id: params[:id], restaurant_id: params[:restaurant_id] }, class: 'btn btn-primary' %>
   <%elsif @carts.blank?%>
     <h4>No items in cart.</h4>
   <%end%>

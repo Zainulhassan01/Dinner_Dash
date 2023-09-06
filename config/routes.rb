@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get '/search', to: 'orders#search'
-  post 'customvalid', to: 'carts#customvalid'
+  post 'checkout', to: 'carts#checkout'
   post 'retire', to: 'items#retire'
   resources :carts
   resources :restaurants do
