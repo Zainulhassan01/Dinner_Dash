@@ -25,7 +25,7 @@ class Item < ApplicationRecord
   def add_default_cover
     return if image.attached?
 
-    image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'cover.jpeg')), filename: 'cover.jpeg',
+    image.attach(io: File.open(Rails.root.join('app/assets/images/cover.jpeg')), filename: 'cover.jpeg',
                  content_type: 'image/jpeg')
   end
 end

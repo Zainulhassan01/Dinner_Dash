@@ -14,9 +14,9 @@ module DinnerDashv2
     config.load_defaults 5.2
 
     config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      env_file = Rails.root.join('config/local_env.yml')
       if File.exist?(env_file)
-        YAML.load(File.open(env_file)).each do |key, value|
+        YAML.safe_load(File.open(env_file)).each do |key, value|
           ENV[key.to_s] = value
         end
       end
