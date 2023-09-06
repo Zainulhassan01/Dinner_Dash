@@ -18,12 +18,12 @@
 //= require popper
 //= require bootstrap
 
-$(function() {
-    $('select').on('change', function(e){
-        var index = $('#Filter option:selected').val();
-        $.ajax({
-          url: '/search',
-          data: {status: index}
-        });
-    });
-})
+// $(function() {
+//     $('select').on('change', function(e){
+//         var index = $('#Filter option:selected').val();
+//         $.ajax({
+//           url: '/search',
+//           data: {status: index}
+//         });
+//     });
+// })

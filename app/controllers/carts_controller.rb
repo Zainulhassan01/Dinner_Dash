@@ -8,8 +8,6 @@ class CartsController < ApplicationController
   before_action :set_cart, only: %i[customvalid]
 
   def index
-    # if Cart is not associated -> Associate cart to current user if user exist
-    # else show cart with no user assigned.
     if current_user.present?
       check = Cart.cart_find
       if check.blank?
@@ -36,9 +34,6 @@ class CartsController < ApplicationController
     flash[:notice] = 'Item has been added.'
   end
 
-  # Refactor this action
-  # if Cart exist => then check for item => if item exist => check increment/decrement => perform_action
-  # else Create cart with given item and quantity.
   def update
     if Cart.any?
       cart = Cart.find_by(item_id: params[:item_id])
@@ -65,8 +60,6 @@ class CartsController < ApplicationController
     end
   end
 
-  # move this to a form_object or a service
-  # move order creation logic to order_controller
   def customvalid
     total = Cart.total(params[:id])
     carts = Cart.all.user_cart(params[:id])
@@ -98,8 +91,6 @@ class CartsController < ApplicationController
     Cart.where('user_id is null').update_all(user_id: params[:id]) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  # move to form_object or a service
-  # use this method through the above suggested class in orders_controller.
   def order_create(cart, restaurant_id, total)
     order = Order.find_or_create_by(user_id: params[:id], restaurant_id: restaurant_id, status: 0, total: total.to_i)
     if order.new_record?

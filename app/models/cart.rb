@@ -4,8 +4,6 @@ class Cart < ApplicationRecord
   has_many :items, dependent: :destroy
   belongs_to :user, optional: true
 
-  # wrong usage of scope
-  # scopes are used only for fetching data
   scope :user_cart, ->(user_id) { where(user_id: user_id) }
   scope :total, ->(user_id) { where(user_id: user_id).sum(:subtotal) }
   scope :cart_find, -> { Cart.all.where('user_id is null') }

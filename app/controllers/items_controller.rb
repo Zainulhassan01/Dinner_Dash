@@ -66,7 +66,6 @@ class ItemsController < ApplicationController
       @categories = Category.all
     end
   
-    # create item_category
     def create_itemcategory(item, names, resturant)
       names.each do |name|
         category = Category.find_by(name: name, restaurant_id: resturant)

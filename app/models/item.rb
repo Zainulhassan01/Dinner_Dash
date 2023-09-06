@@ -11,7 +11,6 @@ class Item < ApplicationRecord
     has_one_attached :image
   
     after_commit :add_default_cover, on: %i[create update]
-    # validate title only for given resturant
     validates :title, :description, presence: true
     validates :price, numericality: { greater_than: 0 }
     validates_with CustomValidator, on: :create
