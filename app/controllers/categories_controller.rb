@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
   end
 
   def find_category
-    @category = Category.find(params[:id])
+    @category = @restaurant.categories.find(params[:id]) if @restaurant
   end
 
   def category_params

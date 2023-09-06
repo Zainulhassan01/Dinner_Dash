@@ -12,7 +12,7 @@ class CartsController < ApplicationController
   def index
     if current_user.present?
       check_for_nul = Cart.cart_find
-      @carts, @total = CartService.new(check_for_nul, params[:id]).call
+      @carts, @total = CartService.new(check_for_nul, params[:id]).show_carts
     else
       @carts = Cart.cart_find
       @total = Cart.all.sum(:subtotal)
@@ -20,10 +20,9 @@ class CartsController < ApplicationController
     authorize @carts
   end
 
-  def create(id)
-    item = Item.find_by(id: id)
-    subtotal = item.price
-    cart = Cart.create!(item_id: id, user_id: current_user.present? ? current_user.id : nil, quantity: 1, subtotal: subtotal)
+  def create
+    subtotal = @item.price
+    cart = Cart.create!(item_id: @item.id, user_id: current_user.present? ? current_user.id : nil, quantity: 1, subtotal: subtotal)
     authorize cart
     redirect_back(fallback_location: root_path)
     flash[:notice] = 'Item has been added.'
@@ -40,25 +39,22 @@ class CartsController < ApplicationController
           redirect_back(fallback_location: root_path)
         end
       else
-        create(params[:item_id])
+        create
       end
     else
-      create(params[:item_id])
+      create
     end
   end
 
   def checkout
     authorize @carts
-    @carts.each do |cart|
-      item = Item.find_by(id: cart.item_id)
-      restaurant_id = item.restaurant_id
-      order_create(cart, restaurant_id, @total)
-    end
+    create_order_according_to_cart(@carts, @total)
     redirect_to root_path, notice: 'Order has been placed.' if Cart.where(user_id: params[:id]).delete_all
   end
 
   def destroy
-    authorize Cart
+    cart = Cart.all
+    authorize cart
     if current_user.nil?
       redirect_to root_path, notice: 'Cart has been cleared.' if Cart.where('user_id is null').delete_all
     else
@@ -83,9 +79,9 @@ class CartsController < ApplicationController
   end
 
   def quantity_updation(status, cart)
-    if status.present?
-      to_boolean(status) ? cart.quantity += 1 : cart.quantity -= 1
-    end
+    return if status.blank?
+
+    to_boolean(status) ? cart.quantity += 1 : cart.quantity -= 1
   end
 
   def find_cart

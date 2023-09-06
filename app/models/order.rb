@@ -11,7 +11,7 @@ class Order < ApplicationRecord
   scope :find_order_according_to_status, ->(status, restaurant_id) { where(status: status, restaurant_id: restaurant_id) }
   scope :find_orders_in_item_order, ->(id) { ItemOrder.all.where(order_id: id) }
 
-  validates :status, numericality: { only_integer: true }
+  validates :status, presence: true
   validates :total, numericality: { only_integer: true, greater_than: 0 }
   enum status: {
     ordered: 0,

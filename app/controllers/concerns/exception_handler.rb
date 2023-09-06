@@ -8,7 +8,6 @@ module ExceptionHandler
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
-    rescue_from StandardError, with: :standard_error
 
     private
 
@@ -24,11 +23,6 @@ module ExceptionHandler
 
     def record_invalid
       flash[:alert] = 'Record Invalid.'
-      redirect_to(request.referer || root_path)
-    end
-
-    def standard_error
-      flash[:alert] = 'Error while executing.'
       redirect_to(request.referer || root_path)
     end
   end

@@ -3,22 +3,22 @@
 # cart policy
 class CartPolicy < ApplicationPolicy
   def index?
-    user ? true : User.last.id + 1
-  end
-
-  def update?
-    user ? true : User.last.id + 1
+    true
   end
 
   def create?
-    user ? true : User.last.id + 1
+    true
+  end
+
+  def update?
+    true
   end
 
   def checkout?
-    user ? true : User.last.id + 1
+    true
   end
 
   def destroy?
-    user ? true : User.last.id + 1
+    true
   end
 end

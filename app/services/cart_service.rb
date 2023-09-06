@@ -16,7 +16,7 @@ class CartService
     end
   end
 
-  def call
+  def show_carts
     if @check.blank?
       @carts = Cart.all.find_user_cart(@id)
       @total = Cart.calculate_total(@id)
@@ -30,7 +30,7 @@ class CartService
   def update_cart
     ActiveModel::Type::Boolean.new.cast(@remove) ? remove_item(@item) : nil
     remove_item(@item) if @cart.quantity.zero?
-    subtotal = @item.price * @cart.quantity
+    @item.price * @cart.quantity
   end
 
   def remove_item(item)

@@ -26,7 +26,7 @@ class OrdersController < ApplicationController
 
   def update
     authorize @order
-    if @order.update!(status: params[:status].to_i, restaurant_id: @order.restaurant_id, user_id: @order.user_id,
+    if @order.update!(status: params[:status], restaurant_id: @order.restaurant_id, user_id: @order.user_id,
                       total: @order.total)
       redirect_back(fallback_location: root_path)
     else

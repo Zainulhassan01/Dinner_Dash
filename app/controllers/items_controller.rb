@@ -50,8 +50,7 @@ class ItemsController < ApplicationController
 
   def retire
     authorize @item
-    @item.available = !@item.available
-    if @item.update(params.permit(:title, :description, :price, :available))
+    if @item.update(available: !@item.available)
       redirect_back(fallback_location: root_path)
       flash[:notice] = 'Item Updated.'
     else

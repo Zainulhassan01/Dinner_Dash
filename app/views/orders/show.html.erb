@@ -16,8 +16,8 @@
   </div>
       <% if @order.status == 'ordered' && current_user.admin? && policy(@order).update? %>
           <div class = 'plus'>
-            <span><%= button_to "Completed", { controller: "orders", action: "update", id: @order.id, status: 1},method: :patch, class: 'btn btn-primary' %></span>
-            <span><%= button_to "Canceled", { controller: "orders", action: "update", id: @order.id, status: 2 }, method: :patch, class: 'btn btn-danger' %></span>
+            <span><%= button_to "Completed", { controller: "orders", action: "update", id: @order.id, status: "completed"},method: :patch, class: 'btn btn-primary' %></span>
+            <span><%= button_to "Canceled", { controller: "orders", action: "update", id: @order.id, status: "cancelled" }, method: :patch, class: 'btn btn-danger' %></span>
           </div>
         <%else%>
           <h2>Current Order Status: <%=@order.status%></h2>
