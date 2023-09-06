@@ -3,7 +3,6 @@
 # carts controller
 class CartsController < ApplicationController
   include CartHandler
-  before_action :find_item, only: %i[create update]
   before_action :authenticate_user!, only: %i[checkout]
   before_action :create_session, only: %i[update]
   after_action :update_cart, only: %i[update quantity]
@@ -60,10 +59,6 @@ class CartsController < ApplicationController
 
   private
 
-  def find_item
-    @item = Item.find_by(id: params[:item_id])
-  end
-
   def quantity_updation(status)
     count = session[:cart][params[:item_title]]
     to_boolean(status) ? count += 1 : count -= 1
@@ -78,19 +73,25 @@ class CartsController < ApplicationController
     session[:cart].delete(params[:item_title]) if count.zero?
   end
 
+  def cart_to_session
+    session[:cart] ||= {} if session[:cart].nil?
+    @carts = Cart.where(user_id: current_user.id)
+    @carts.each do |cart|
+      item = Item.find_by(id: cart.item_id)
+      session[:cart][item.title] = cart.quantity if item.available
+    end
+    session[:cart]
+  end
+
   def update_cart
     if current_user
       populate_cart unless Cart.nil?
       item = Item.find_by(title: params[:item_title])
-      if to_boolean(params[:remove])
-        # removeitem(item)
-        session[:cart].delete(params[:item_title])
-        Cart.where(quantity: 0).delete_all
-        return
-      end
       cart = Cart.find_by(item_id: item.id)
-      cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
-                   subtotal: item.price * session[:cart][params[:item_title]].to_i)
+      if cart&.present?
+        cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
+                     subtotal: item.price * session[:cart][params[:item_title]].to_i)
+      end
     end
     Cart.where(quantity: 0).delete_all
   end
@@ -100,25 +101,15 @@ class CartsController < ApplicationController
       @carts = session[:cart]
       @carts.each do |cart|
         item = Item.find_by(title: cart[0])
-        cart = Cart.find_by(item_id: item.id)
-        if !cart.nil?
-          cart.update!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][params[:item_title]].to_i,
-                       subtotal: item.price * session[:cart][params[:item_title]].to_i)
+        cart_model = Cart.find_by(item_id: item.id)
+        if !cart_model.nil?
+          cart_model.update!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
+                             subtotal: item.price * cart[1].to_i)
         else
-          Cart.create!(item_id: item.id, user_id: current_user.id, quantity: session[:cart][item.title].to_i,
-                       subtotal: item.price * session[:cart][item.title].to_i)
+          Cart.create!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
+                       subtotal: item.price * cart[1].to_i)
         end
       end
     end
-  end
-
-  def cart_to_session
-    session[:cart] ||= {} if session[:cart].nil?
-    @carts = Cart.where(user_id: current_user.id)
-    @carts.each do |cart|
-      item = Item.find_by(id: cart.item_id)
-      session[:cart][item.title] = cart.quantity if item.available
-    end
-    session[:cart]
   end
 end
