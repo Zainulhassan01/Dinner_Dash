@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       resources :items
     end
   end
-  root to: 'restaurants#index'
+  root 'restaurants#index'
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
