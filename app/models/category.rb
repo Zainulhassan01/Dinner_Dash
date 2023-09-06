@@ -6,5 +6,6 @@ class Category < ApplicationRecord
   has_many :items, through: :item_categories, dependent: :destroy
 
   validates :name, presence: true, length: { minimum: 3, maximum: 10 }
+  validates :name, uniqueness: { scope: :restaurant_id }
   validates_with CustomValidator, on: :create
 end

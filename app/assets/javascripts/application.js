@@ -18,12 +18,23 @@
 //= require popper
 //= require bootstrap
 
-// $(function() {
-//     $('select').on('change', function(e){
-//         var index = $('#Filter option:selected').val();
-//         $.ajax({
-//           url: '/search',
-//           data: {status: index}
-//         });
-//     });
-// })
+$ (function(){
+$('select').change( function(e){
+    console.log('123');
+    var status = document.getElementById("Filter");
+    var index = status.options[status.selectedIndex].text;
+    $.ajax({
+        url: '/search',
+        data: {status: index}
+        });
+    })
+});
+function update_cart(item, status) {
+    $.ajax({
+      url: '/quantity',
+      data: {
+        item_title: item,
+        status: status
+        }
+      });
+}

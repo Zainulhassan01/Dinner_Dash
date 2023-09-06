@@ -2,6 +2,8 @@
 
 # class item model
 class Item < ApplicationRecord
+  self.per_page = 5
+
   belongs_to :restaurant
   belongs_to :cart, optional: true
   has_many :item_categories, dependent: :destroy
@@ -14,6 +16,7 @@ class Item < ApplicationRecord
   validates :title, :description, presence: true
   validates :price, numericality: { greater_than: 0 }
   validates_with CustomValidator, on: :create
+  validates :title, uniqueness: { scope: :restaurant_id }
 
   scope :find_category_items, ->(restaurant_id) { Category.all.where(restaurant_id: restaurant_id) }
 

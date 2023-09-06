@@ -35,7 +35,7 @@ class ItemsController < ApplicationController
 
   def update
     authorize @item
-    if @item.update!(item_params)
+    if @item.update(item_params)
       ItemCategory.create_item_category(@item, params[:names], params[:restaurant_id])
       redirect_to restaurant_category_items_path
     else
@@ -45,7 +45,9 @@ class ItemsController < ApplicationController
 
   def destroy
     authorize @item
-    redirect_to restaurant_category_items_path if @item.destroy!
+    @item.destroy!
+    flash[:notice] = 'Item has been deleted.'
+    redirect_to restaurant_category_items_path
   end
 
   def retire

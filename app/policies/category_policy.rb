@@ -7,14 +7,14 @@ class CategoryPolicy < ApplicationPolicy
   end
 
   def new?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def create?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def destroy?
-    user ? user.admin? : false
+    user.admin?
   end
 end

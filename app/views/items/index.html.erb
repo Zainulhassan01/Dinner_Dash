@@ -9,9 +9,11 @@
           <h3>Price</h3>
           <p><%= item.price %></p>
           <%if policy(item).show? %>
-            <%= button_to 'Add item to cart', { :controller => 'carts', :action => 'update',
-                :item_title => item.title, id: current_user.present? ? current_user.id : User.last.id + 1, :restaurant_id=> item.restaurant_id}, method: :patch,
-                class: 'btn btn-primary' %>
+              <% if !item_in_session?(item.title)%>
+                <%= button_to 'Add item to cart', { :controller => 'carts', :action => 'update',
+                    :item_title => item.title, id: current_user.present? ? current_user.id : User.last.id + 1, :restaurant_id=> item.restaurant_id}, method: :patch,
+                    class: 'btn btn-primary' %>
+              <%end%>
           <%end%>
           <div class = 'img'>
                 <%= image_tag(item.image) if item.image.present?%>
@@ -23,15 +25,15 @@
           <h3>Price</h3>
           <p><%= item.price %></p>
         <%end%>
-        <% if policy(item).destroy? %>
-          <%= link_to 'edit item', edit_restaurant_category_item_path(id: item.id), class: 'link'%>
+        <% if current_user&.admin? %>
+          <%= link_to 'edit item', edit_restaurant_category_item_path(id: item.id), class: 'action'%>
           <%= link_to 'Delete item', restaurant_category_item_path(id: item.id), method: :delete, data: {confirm: 'Are you sure bhaijan!'},
-           class: 'link'%>
+           class: 'action'%>
           <% if item.available%>
             <%= button_to 'Retire Item', { :controller => 'items', :action => 'retire', :id => item.id},data: {confirm: 'Are you sure bhaijan!'},
-            class: 'btn btn-danger' %>
+            class: 'btn btn-danger', id: 'retire' %>
           <% else %>
-            <%= button_to 'Avail Item', { :controller => 'items', :action => 'retire', :id => item.id}, class: 'btn btn-danger'%>
+            <%= button_to 'Avail Item', { :controller => 'items', :action => 'retire', :id => item.id}, class: 'btn btn-danger', id: 'retire'%>
           <%end%>
         <%end%>
       </div>
@@ -39,6 +41,6 @@
   </div>
   <br>
   <% if item_nil?(current_user,@items) %>
-    <%= link_to 'New item', new_restaurant_category_item_path, class: 'link'%>
+    <%= link_to 'New item', new_restaurant_category_item_path, class: 'action'%>
   <%end%>
 </div>

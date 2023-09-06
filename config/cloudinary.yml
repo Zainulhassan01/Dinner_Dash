@@ -1,13 +1,13 @@
 ---
 development:
-  cloud_name: dm3rlmzrh
-  api_key: '363783142116114'
-  api_secret: ri5UHsKrdJZA3UqmqSVYIFZrIsA
+  cloud_name: <%= ENV['CLOUDINARY_CLOUD_NAME'] %>
+  api_key: <%= ENV['CLOUDINARY_API'] %>
+  api_secret: <%= ENV['CLOUDINARY_SECRET'] %>
   enhance_image_tag: true
   static_file_support: false
 production:
-  cloud_name: dm3rlmzrh
-  api_key: '363783142116114'
-  api_secret: ri5UHsKrdJZA3UqmqSVYIFZrIsA
+  cloud_name: <%= ENV['CLOUDINARY_CLOUD_NAME'] %>
+  api_key: <%= ENV['CLOUDINARY_API'] %>
+  api_secret: <%= ENV['CLOUDINARY_SECRET'] %>
   enhance_image_tag: true
   static_file_support: true

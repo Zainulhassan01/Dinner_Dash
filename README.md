@@ -8,6 +8,8 @@ Things you may want to install to run this application:
 
 * run bundle install for installing all the required dependencies.
 
+* DB version is psql -> 12.8.
+
 * run rake db:migrate command for migrating the database.
 
 * run rake db:seed for data seeding at initial level.

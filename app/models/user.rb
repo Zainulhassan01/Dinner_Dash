@@ -10,4 +10,10 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  after_create :welcome_msg
+
+  def welcome_msg
+    UserMailer.registration_confirmation(self).deliver_now
+  end
 end

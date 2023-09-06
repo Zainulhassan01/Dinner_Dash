@@ -9,14 +9,3 @@
     <h4>No items in cart.</h4>
   <%end%>
 </div>
-<script>
-function update_cart(item, status) {
-    $.ajax({
-      url: '/quantity',
-      data: {
-        item_title: item,
-        status: status
-        }
-      });
-  }
-</script>

@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
   before_action :find_category, only: %i[destroy]
 
   def index
-    @categories = @restaurant.categories
+    @categories = Category.includes(:restaurant).where(restaurants: { id: params[:restaurant_id] })
     authorize @categories
   end
 
@@ -27,7 +27,9 @@ class CategoriesController < ApplicationController
 
   def destroy
     authorize @category
-    redirect_to restaurant_categories_path if @category.destroy!
+    @category.destroy!
+    flash[:notice] = 'Category has been deleted.'
+    redirect_to restaurant_categories_path
   end
 
   private

@@ -5,7 +5,7 @@ class CartsController < ApplicationController
   include CartHandler
   before_action :authenticate_user!, only: %i[checkout]
   before_action :create_session, only: %i[update]
-  after_action :update_cart, only: %i[update quantity]
+  around_action :update_cart, only: %i[update quantity]
 
   def index
     @carts = session[:cart].presence ? session[:cart] : nil
@@ -51,25 +51,15 @@ class CartsController < ApplicationController
 
   def destroy
     session.delete(:cart)
-    Cart.where(user_id: current_user.id).delete_all
+    Cart.delete_all
     flash[:notice] = 'Cart has been cleared.'
     redirect_to root_path
   end
 
   private
 
-  def quantity_updation(status)
-    count = session[:cart][params[:item_title]]
-    to_boolean(status) ? count += 1 : count -= 1
-    count
-  end
-
   def create_session
     session[:cart] ||= {} if session[:cart].nil?
-  end
-
-  def check_count?(count)
-    session[:cart].delete(params[:item_title]) if count.zero?
   end
 
   def cart_to_session
@@ -83,6 +73,16 @@ class CartsController < ApplicationController
   end
 
   def update_cart
+    ActiveRecord::Base.transaction do
+      check_user
+      yield
+      check_user
+    ensure
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def check_user
     if current_user
       populate_cart unless Cart.nil?
       item = Item.find_by(title: params[:item_title])
@@ -92,22 +92,22 @@ class CartsController < ApplicationController
                      subtotal: item.price * session[:cart][params[:item_title]].to_i)
       end
     end
-    Cart.where(quantity: 0).delete_all
+    flash[:alert] = 'Cart is not destroyed.' unless Cart.where(quantity: 0).delete_all
   end
 
   def populate_cart
-    if current_user
-      @carts = session[:cart]
-      @carts.each do |cart|
-        item = Item.find_by(title: cart[0])
-        cart_model = Cart.find_by(item_id: item.id)
-        if !cart_model.nil?
-          cart_model.update!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
-                             subtotal: item.price * cart[1].to_i)
-        else
-          Cart.create!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
-                       subtotal: item.price * cart[1].to_i)
-        end
+    return unless current_user
+
+    @carts = session[:cart]
+    @carts.each do |cart|
+      item = Item.find_by(title: cart[0])
+      cart_model = Cart.find_by(item_id: item.id)
+      if !cart_model.nil?
+        cart_model.update!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
+                           subtotal: item.price * cart[1].to_i)
+      else
+        Cart.create!(item_id: item.id, user_id: current_user.id, quantity: cart[1].to_i,
+                     subtotal: item.price * cart[1].to_i)
       end
     end
   end

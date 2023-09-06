@@ -11,10 +11,10 @@ class OrderPolicy < ApplicationPolicy
   end
 
   def update?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def search?
-    user ? user.admin? : false
+    user.admin?
   end
 end

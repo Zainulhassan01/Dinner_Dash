@@ -1,7 +1,7 @@
 <% @restaurants.each do |rest|%>
   <h2><%= rest.name %></h2>
   <%= link_to 'Explore Restaurant' , rest, class: 'link1'%>
-  <% if policy(rest).destroy?%>
+  <% if current_user&.admin?%>
     <%= link_to ' Delete Restaraunt', rest , method: :delete, data: {confirm: "Are you sure biro!"}, class: 'link2'%>
   <%end%>
 <%end%>

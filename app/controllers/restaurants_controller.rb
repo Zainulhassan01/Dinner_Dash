@@ -28,7 +28,9 @@ class RestaurantsController < ApplicationController
   def show
     authorize @restaurant
     if @restaurant
-      @items = @restaurant.items
+      # @items = @restaurant.items # n+1
+      @items = Item.includes(:restaurant).where(restaurants: { id: params[:id] })
+                   .paginate(page: params[:page])
     else
       flash[:alert] = @restaurant.errors.full_messages
       redirect_to(request.referer || root_path)
@@ -37,7 +39,8 @@ class RestaurantsController < ApplicationController
 
   def destroy
     authorize @restaurant
-    redirect_to root_path, notice: 'Restaurant Deleted.' if @restaurant.destroy!
+    @restaurant.destroy!
+    redirect_to root_path, notice: 'Restaurant Deleted.'
   end
 
   private

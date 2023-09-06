@@ -15,22 +15,13 @@ AllCops:
     - 'bin/**/*'
     
 Metrics/LineLength:
-  Max: 145
-
-Metrics/BlockNesting:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-  Max: 23
-Metrics/ClassLength:
   Max: 120
+  
+Metrics/MethodLength:
+  Max: 23
+
+Metrics/AbcSize:
+  Max: 40
 
 Metrics/BlockLength:
   Exclude:
@@ -41,11 +32,5 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
 
-Style/ClassVars:
-  Enabled: false
-convention:Style/GuardClause:
-  Enabled: false
 Style/Documentation:
-  Enabled: true
-Metrics/AbcSize:
-  Max: 70
+  Enabled: false

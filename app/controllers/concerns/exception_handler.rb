@@ -8,6 +8,7 @@ module ExceptionHandler
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+    rescue_from ActiveRecord::Rollback, with: :record_rollback
 
     private
 
@@ -23,6 +24,11 @@ module ExceptionHandler
 
     def record_invalid
       flash[:alert] = 'Record Invalid.'
+      redirect_to(request.referer || root_path)
+    end
+
+    def record_rollback
+      flash[:alert] = 'An error occured, Transaction not completed.'
       redirect_to(request.referer || root_path)
     end
   end

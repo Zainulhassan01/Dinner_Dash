@@ -7,11 +7,11 @@ class ItemPolicy < ApplicationPolicy
   end
 
   def new?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def create?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def show?
@@ -19,18 +19,18 @@ class ItemPolicy < ApplicationPolicy
   end
 
   def edit?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def update?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def destroy?
-    user ? user.admin? : false
+    user.admin?
   end
 
   def retire?
-    user ? user.admin? : false
+    user.admin?
   end
 end
